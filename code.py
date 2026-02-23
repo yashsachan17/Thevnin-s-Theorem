@@ -9,6 +9,7 @@ def get_now():
 st.set_page_config(page_title="Thevenin Theorem Lab", layout="wide")
 
 st.title("⚡ Verification of Thevenin’s Theorem")
+st.title("By Yash Sachan")
 st.markdown("---")
 
 # --- SIDEBAR: PARAMETERS & PRECAUTIONS ---
