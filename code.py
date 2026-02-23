@@ -23,10 +23,13 @@ if st.button("Run Verification Process"):
     # STEP 1: ORIGINAL CIRCUIT
     st.subheader(f"📍 Step 1: Original Circuit Setup [{get_now()}]")
     
-    # Using an image of a standard bridge/Thevenin network
-    
-    st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Thevenin_equivalent_circuit.svg/640px-Thevenin_equivalent_circuit.svg.png", 
-             caption="Standard Thevenin Network Schematic", width=400)
+    # We use LaTeX to show the circuit connections professionally
+    st.latex(r"""
+    \begin{array}{c}
+    \text{Circuit Configuration:} \\
+    E \to R_1 \to (R_3 \parallel (R_2 + R_L))
+    \end{array}
+    """)
     
     st.info(f"Circuit initialized with Source={v_source}V, R1={r1}Ω, R2={r2}Ω, R3={r3}Ω")
     time.sleep(1)
@@ -39,10 +42,10 @@ if st.button("Run Verification Process"):
     
     col1, col2 = st.columns(2)
     with col1:
-        # Displaying a Resistor Symbol using Markdown/Images
-        [attachment_0](attachment)
-        st.write("Measuring Open Circuit Voltage ($V_{oc}$):")
-        st.latex(r"V_{TH} = E \cdot \frac{R_3}{R_1 + R_3}")
+        # Displaying a Resistor Symbol using standard electronic notation
+        st.write("### Component: Voltage Source ($E$)")
+        st.write("Measuring Open Circuit Voltage ($V_{oc}$) across Terminals A-B.")
+        st.latex(r"V_{TH} = E \times \left( \frac{R_3}{R_1 + R_3} \right)")
     with col2:
         st.success(f"Calculated Vth: **{round(vth, 3)} Volts**")
     
@@ -52,15 +55,14 @@ if st.button("Run Verification Process"):
     st.markdown("---")
     st.subheader(f"📍 Step 3: Calculating Thevenin Resistance (Rth) [{get_now()}]")
     
-    
-    
     r_parallel = (r1 * r3) / (r1 + r3)
     rth = r2 + r_parallel
     
     col3, col4 = st.columns(2)
     with col3:
-        st.write("Source is Short-Circuited to find equivalent resistance:")
-        st.latex(r"R_{TH} = R_2 + (R_1 \parallel R_3)")
+        st.write("### Component: Resistance ($R_{eq}$)")
+        st.write("Source is Short-Circuited for analysis.")
+        st.latex(r"R_{TH} = R_2 + \frac{R_1 \cdot R_3}{R_1 + R_3}")
     with col4:
         st.success(f"Calculated Rth: **{round(rth, 3)} Ω**")
     time.sleep(1)
@@ -72,15 +74,10 @@ if st.button("Run Verification Process"):
     il = vth / (rth + rl)
     il_mA = il * 1000
     
-    
-    
     st.write("### Thevenin Equivalent Model")
-    st.latex(f"I_L = \\frac{{{round(vth,2)}V}}{{{round(rth,2)}\Omega + {rl}\Omega}}")
+        st.latex(f"I_L = \\frac{{{round(vth,2)}V}}{{{round(rth,2)}\Omega + {rl}\Omega}}")
     
     st.metric(label="Final Load Current (IL)", value=f"{round(il_mA, 3)} mA")
     st.balloons()
     
     st.success("**Result & Conclusion:** The theoretical current matches the simplified model. Thevenin's Theorem is Verified.")
-
-else:
-    st.write("Adjust the values in the sidebar and click 'Run' to start the verification.")
